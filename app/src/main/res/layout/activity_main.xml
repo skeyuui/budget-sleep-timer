@@ -125,6 +125,14 @@
                 android:textColor="#FF0D1117"
                 android:background="@drawable/btn_accent"
                 android:focusable="true" />
+                
+            <TextView
+                android:id="@+id/current_time_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                android:textColor="@color/text_secondary" />
 
         </LinearLayout>
 

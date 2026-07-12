@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
     private LinearLayout schedulesContainer;
     private TextView timerCountdown;
     private Button cancelTimerBtn;
+    private TextView currentTimeDisplay;
     
     private View adbBanner;
     private TextView adbBannerText;
@@ -47,6 +48,10 @@ public class MainActivity extends Activity {
         @Override
         public void run() {
             updateTimerCountdown();
+            if (currentTimeDisplay != null) {
+                Calendar now = Calendar.getInstance();
+                currentTimeDisplay.setText(String.format("%02d:%02d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE)));
+            }
             handler.postDelayed(this, 1000);
         }
     };
@@ -98,10 +103,13 @@ public class MainActivity extends Activity {
             }
         });
 
-        // Default to current time
-        Calendar now = Calendar.getInstance();
-        hourPicker.setValue(now.get(Calendar.HOUR_OF_DAY));
-        minutePicker.setValue(now.get(Calendar.MINUTE));
+        // Default to current time + 1 minute
+        Calendar defaultTime = Calendar.getInstance();
+        defaultTime.add(Calendar.MINUTE, 1);
+        hourPicker.setValue(defaultTime.get(Calendar.HOUR_OF_DAY));
+        minutePicker.setValue(defaultTime.get(Calendar.MINUTE));
+
+        currentTimeDisplay = findViewById(R.id.current_time_display);
 
         setupTvPicker(hourPicker);
         setupTvPicker(minutePicker);
@@ -242,28 +250,28 @@ public class MainActivity extends Activity {
             boolean isEditing = false;
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         isEditing = !isEditing;
                         v.setBackgroundResource(isEditing ? R.drawable.picker_bg_editing : R.drawable.picker_bg);
-                        return true;
                     }
-                    if (!isEditing) {
-                        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                            View next = v.focusSearch(View.FOCUS_UP);
+                    return true;
+                }
+                if (!isEditing) {
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                            View next = v.focusSearch(keyCode == KeyEvent.KEYCODE_DPAD_UP ? View.FOCUS_UP : View.FOCUS_DOWN);
                             if (next != null) next.requestFocus();
-                            return true;
                         }
-                        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                            View next = v.focusSearch(View.FOCUS_DOWN);
-                            if (next != null) next.requestFocus();
-                            return true;
-                        }
+                        return true; // Block NumberPicker from scrolling
                     }
-                    if (isEditing && (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT)) {
-                        isEditing = false;
-                        v.setBackgroundResource(R.drawable.picker_bg);
-                        return false;
+                } else {
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                            isEditing = false;
+                            v.setBackgroundResource(R.drawable.picker_bg);
+                        }
+                        return false; // let focus escape
                     }
                 }
                 return false;
