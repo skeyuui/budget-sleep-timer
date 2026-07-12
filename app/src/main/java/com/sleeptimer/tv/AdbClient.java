@@ -200,10 +200,23 @@ public class AdbClient {
                 skipBytes(in, header[3]);
             }
 
-            // Give the command time to execute
-            Thread.sleep(500);
+            if (header[0] != A_OKAY) return false;
 
-            return header[0] == A_OKAY;
+            // Wait for the command to finish executing (until A_CLSE is received)
+            // ADB kills the process if we close the connection too early!
+            while (true) {
+                try {
+                    int[] h = readHeader(in);
+                    if (h[3] > 0) skipBytes(in, h[3]);
+                    if (h[0] == 0x45534c43) { // A_CLSE (CLSE in little-endian)
+                        break;
+                    }
+                } catch (Exception e) {
+                    break; // timeout or EOF
+                }
+            }
+
+            return true;
 
         } catch (Exception e) {
             e.printStackTrace();
