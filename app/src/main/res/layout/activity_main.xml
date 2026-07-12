@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="48dp"
+    android:background="@color/background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="32sp"
+        android:textColor="@color/text_primary"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No timer set"
+        android:textSize="48sp"
+        android:textColor="@color/accent"
+        android:fontFamily="monospace"
+        android:layout_marginBottom="40dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <Button
+            android:id="@+id/btn_15"
+            style="@style/TimerButton"
+            android:text="15 min" />
+
+        <Button
+            android:id="@+id/btn_30"
+            style="@style/TimerButton"
+            android:text="30 min" />
+
+        <Button
+            android:id="@+id/btn_45"
+            style="@style/TimerButton"
+            android:text="45 min" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="32dp">
+
+        <Button
+            android:id="@+id/btn_60"
+            style="@style/TimerButton"
+            android:text="60 min" />
+
+        <Button
+            android:id="@+id/btn_90"
+            style="@style/TimerButton"
+            android:text="90 min" />
+
+        <Button
+            android:id="@+id/btn_120"
+            style="@style/TimerButton"
+            android:text="120 min" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:text="Cancel"
+        android:textSize="18sp"
+        android:textColor="@color/text_primary"
+        android:background="@color/cancel"
+        android:visibility="gone"
+        android:focusable="true" />
+
+</LinearLayout>
