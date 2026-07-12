@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sleep Scheduler</string>
+
+    <string name="day_sun">Su</string>
+    <string name="day_mon">Mo</string>
+    <string name="day_tue">Tu</string>
+    <string name="day_wed">We</string>
+    <string name="day_thu">Th</string>
+    <string name="day_fri">Fr</string>
+    <string name="day_sat">Sa</string>
+
+    <string name="preset_daily">Daily</string>
+    <string name="preset_weekdays">Weekdays</string>
+    <string name="preset_weekends">Weekends</string>
+    
+    <string name="set_schedule">Set Schedule</string>
+    
+    <string name="active_schedules">Active Schedules</string>
+    <string name="no_schedules">No schedules</string>
+    
+    <string name="quick_sleep">Quick Sleep</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="repeat_once">Once</string>
+
+    <string name="adb_disabled_warning">ADB is disabled or connection refused. Please enable USB Debugging in Developer Options.</string>
+    <string name="adb_auth_warning">Please check "Always allow from this computer" on your TV to authorize the app.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="retry">Retry</string>
 </resources>

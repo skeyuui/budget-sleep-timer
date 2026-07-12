@@ -1,4 +1,5 @@
-# Sleep Scheduler for Android TV
+# Budget Sleeper
+## Sleep Scheduler for Android TV
 
 Minimal Android TV app that puts your TV to sleep on a schedule.
 

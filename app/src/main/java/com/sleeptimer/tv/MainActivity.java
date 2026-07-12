@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.content.Intent;
+import android.provider.Settings;
+import android.view.KeyEvent;
 
 import java.util.Calendar;
 import java.util.List;
@@ -24,6 +27,12 @@ public class MainActivity extends Activity {
     private LinearLayout schedulesContainer;
     private TextView timerCountdown;
     private Button cancelTimerBtn;
+    
+    private View adbBanner;
+    private TextView adbBannerText;
+    private Button adbBannerBtn;
+    private boolean adbCheckDone = false;
+    private Thread adbCheckThread = null;
 
     // Day selection: 0=Sun, 1=Mon, ..., 6=Sat
     private final boolean[] selectedDays = new boolean[7];
@@ -48,6 +57,23 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         store = new ScheduleStore(this);
+
+        // --- ADB Warning Banner ---
+        adbBanner = findViewById(R.id.adb_warning_banner);
+        adbBannerText = findViewById(R.id.adb_warning_text);
+        adbBannerBtn = findViewById(R.id.btn_open_dev_settings);
+        adbBannerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
+                } catch (Exception e) {
+                    startActivity(new Intent(Settings.ACTION_SETTINGS));
+                }
+            }
+        });
+
+        checkAdbStatus();
 
         // --- Time pickers ---
         hourPicker = findViewById(R.id.hour_picker);
@@ -76,6 +102,9 @@ public class MainActivity extends Activity {
         Calendar now = Calendar.getInstance();
         hourPicker.setValue(now.get(Calendar.HOUR_OF_DAY));
         minutePicker.setValue(now.get(Calendar.MINUTE));
+
+        setupTvPicker(hourPicker);
+        setupTvPicker(minutePicker);
 
         // --- Day toggle buttons ---
         dayButtons = new Button[7];
@@ -150,10 +179,96 @@ public class MainActivity extends Activity {
         refreshSchedules();
     }
 
+    private void checkAdbStatus() {
+        if (adbCheckDone) return;
+        // Cancel any previous check thread
+        if (adbCheckThread != null && adbCheckThread.isAlive()) {
+            adbCheckThread.interrupt();
+        }
+        adbCheckThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final int status = AdbClient.testConnection(5555);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (status == AdbClient.STATUS_OK) {
+                            adbBanner.setVisibility(View.GONE);
+                            adbCheckDone = true;
+                        } else {
+                            adbBanner.setVisibility(View.VISIBLE);
+                            if (status == AdbClient.STATUS_AUTH_PENDING) {
+                                adbBannerText.setText(R.string.adb_auth_warning);
+                                adbBannerBtn.setText(R.string.retry);
+                                adbBannerBtn.setVisibility(View.VISIBLE);
+                                adbBannerBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        checkAdbStatus();
+                                    }
+                                });
+                            } else {
+                                adbBannerText.setText(R.string.adb_disabled_warning);
+                                adbBannerBtn.setText(R.string.open_settings);
+                                adbBannerBtn.setVisibility(View.VISIBLE);
+                                adbBannerBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        try {
+                                            startActivity(new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
+                                        } catch (Exception e) {
+                                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        adbCheckThread.start();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(tickRunnable);
+    }
+
+    private void setupTvPicker(final NumberPicker picker) {
+        picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        picker.setOnKeyListener(new View.OnKeyListener() {
+            boolean isEditing = false;
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+                        isEditing = !isEditing;
+                        v.setBackgroundResource(isEditing ? R.drawable.picker_bg_editing : R.drawable.picker_bg);
+                        return true;
+                    }
+                    if (!isEditing) {
+                        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                            View next = v.focusSearch(View.FOCUS_UP);
+                            if (next != null) next.requestFocus();
+                            return true;
+                        }
+                        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                            View next = v.focusSearch(View.FOCUS_DOWN);
+                            if (next != null) next.requestFocus();
+                            return true;
+                        }
+                    }
+                    if (isEditing && (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT)) {
+                        isEditing = false;
+                        v.setBackgroundResource(R.drawable.picker_bg);
+                        return false;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     // ===================== Day selection =====================
@@ -166,10 +281,8 @@ public class MainActivity extends Activity {
     }
 
     private void updateDayButtonStyles() {
-        int sel = getResources().getColor(R.color.accent);
-        int unsel = getResources().getColor(R.color.surface);
         for (int i = 0; i < 7; i++) {
-            dayButtons[i].setBackgroundColor(selectedDays[i] ? sel : unsel);
+            dayButtons[i].setBackgroundResource(selectedDays[i] ? R.drawable.btn_accent : R.drawable.btn_surface);
         }
     }
 
@@ -199,7 +312,7 @@ public class MainActivity extends Activity {
 
         if (schedules.isEmpty()) {
             TextView empty = new TextView(this);
-            empty.setText("No schedules");
+            empty.setText(getString(R.string.no_schedules));
             empty.setTextSize(16);
             empty.setTextColor(getResources().getColor(R.color.text_secondary));
             schedulesContainer.addView(empty);
@@ -231,7 +344,7 @@ public class MainActivity extends Activity {
 
             // Repeat label
             TextView repeat = new TextView(this);
-            repeat.setText(s.getRepeatLabel());
+            repeat.setText(s.getRepeatLabel(this));
             repeat.setTextSize(14);
             repeat.setTextColor(getResources().getColor(R.color.text_secondary));
             repeat.setPadding(dp(8), 0, dp(12), 0);
@@ -242,7 +355,7 @@ public class MainActivity extends Activity {
             rm.setText("\u2715");
             rm.setTextSize(14);
             rm.setTextColor(getResources().getColor(R.color.text_primary));
-            rm.setBackgroundColor(getResources().getColor(R.color.cancel));
+            rm.setBackgroundResource(R.drawable.btn_cancel);
             rm.setMinimumWidth(dp(44));
             rm.setMinimumHeight(dp(36));
             rm.setFocusable(true);

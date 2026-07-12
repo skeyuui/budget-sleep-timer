@@ -2,187 +2,224 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="40dp"
+    android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- ==================== LEFT: Schedule Setup ==================== -->
+    <!-- ADB Warning Banner -->
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingRight="32dp">
-
+        android:id="@+id/adb_warning_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#B00020"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:visibility="gone"
+        android:gravity="center_vertical">
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/adb_warning_text"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="28sp"
-            android:textColor="@color/text_primary"
-            android:layout_marginBottom="20dp" />
-
-        <!-- Time Pickers -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="20dp">
-
-            <NumberPicker
-                android:id="@+id/hour_picker"
-                android:layout_width="80dp"
-                android:layout_height="140dp"
-                android:focusable="true" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" : "
-                android:textSize="32sp"
-                android:textColor="@color/text_primary" />
-
-            <NumberPicker
-                android:id="@+id/minute_picker"
-                android:layout_width="80dp"
-                android:layout_height="140dp"
-                android:focusable="true" />
-        </LinearLayout>
-
-        <!-- Day Toggle Buttons -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
-
-            <Button android:id="@+id/btn_sun" style="@style/DayButton" android:text="Su" />
-            <Button android:id="@+id/btn_mon" style="@style/DayButton" android:text="Mo" />
-            <Button android:id="@+id/btn_tue" style="@style/DayButton" android:text="Tu" />
-            <Button android:id="@+id/btn_wed" style="@style/DayButton" android:text="We" />
-            <Button android:id="@+id/btn_thu" style="@style/DayButton" android:text="Th" />
-            <Button android:id="@+id/btn_fri" style="@style/DayButton" android:text="Fr" />
-            <Button android:id="@+id/btn_sat" style="@style/DayButton" android:text="Sa" />
-        </LinearLayout>
-
-        <!-- Day Preset Shortcuts -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
-
-            <Button android:id="@+id/btn_preset_daily" style="@style/PresetButton" android:text="Daily" />
-            <Button android:id="@+id/btn_preset_weekdays" style="@style/PresetButton" android:text="Weekdays" />
-            <Button android:id="@+id/btn_preset_weekends" style="@style/PresetButton" android:text="Weekends" />
-        </LinearLayout>
-
-        <!-- Set Schedule Button -->
+            android:layout_weight="1"
+            android:text="@string/adb_disabled_warning"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF" />
         <Button
-            android:id="@+id/btn_set_schedule"
-            android:layout_width="200dp"
-            android:layout_height="48dp"
-            android:text="Set Schedule"
-            android:textSize="16sp"
-            android:textColor="#FF0D1117"
-            android:background="@color/accent"
-            android:focusable="true" />
-
+            android:id="@+id/btn_open_dev_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/open_settings"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:background="#80000000"
+            android:focusable="true"/>
     </LinearLayout>
 
-    <!-- ==================== RIGHT: Schedules + Timer ==================== -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingLeft="32dp">
+        android:orientation="horizontal"
+        android:padding="40dp">
 
-        <!-- Active Schedules -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Active Schedules"
-            android:textSize="20sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="10dp" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <!-- ==================== LEFT: Schedule Setup ==================== -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:id="@+id/schedules_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </ScrollView>
-
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/surface"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Quick Timer -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quick Sleep"
-            android:textSize="16sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-
-            <Button android:id="@+id/btn_15" style="@style/TimerButtonSmall" android:text="15" />
-            <Button android:id="@+id/btn_30" style="@style/TimerButtonSmall" android:text="30" />
-            <Button android:id="@+id/btn_45" style="@style/TimerButtonSmall" android:text="45" />
-            <Button android:id="@+id/btn_60" style="@style/TimerButtonSmall" android:text="60" />
-            <Button android:id="@+id/btn_90" style="@style/TimerButtonSmall" android:text="90" />
-            <Button android:id="@+id/btn_120" style="@style/TimerButtonSmall" android:text="120" />
-        </LinearLayout>
-
-        <!-- Timer Countdown -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingRight="32dp">
 
             <TextView
-                android:id="@+id/timer_countdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/app_name"
                 android:textSize="28sp"
-                android:textColor="@color/accent"
-                android:fontFamily="monospace"
-                android:visibility="gone"
-                android:paddingRight="12dp" />
-
-            <Button
-                android:id="@+id/btn_cancel_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="Cancel"
-                android:textSize="13sp"
                 android:textColor="@color/text_primary"
-                android:background="@color/cancel"
-                android:visibility="gone"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Time Pickers -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="20dp">
+
+                <NumberPicker
+                    android:id="@+id/hour_picker"
+                    android:layout_width="80dp"
+                    android:layout_height="140dp"
+                    android:background="@drawable/picker_bg"
+                    android:focusable="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" : "
+                    android:textSize="32sp"
+                    android:textColor="@color/text_primary" />
+
+                <NumberPicker
+                    android:id="@+id/minute_picker"
+                    android:layout_width="80dp"
+                    android:layout_height="140dp"
+                    android:background="@drawable/picker_bg"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <!-- Day Toggle Buttons -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <Button android:id="@+id/btn_sun" style="@style/DayButton" android:text="@string/day_sun" />
+                <Button android:id="@+id/btn_mon" style="@style/DayButton" android:text="@string/day_mon" />
+                <Button android:id="@+id/btn_tue" style="@style/DayButton" android:text="@string/day_tue" />
+                <Button android:id="@+id/btn_wed" style="@style/DayButton" android:text="@string/day_wed" />
+                <Button android:id="@+id/btn_thu" style="@style/DayButton" android:text="@string/day_thu" />
+                <Button android:id="@+id/btn_fri" style="@style/DayButton" android:text="@string/day_fri" />
+                <Button android:id="@+id/btn_sat" style="@style/DayButton" android:text="@string/day_sat" />
+            </LinearLayout>
+
+            <!-- Day Preset Shortcuts -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <Button android:id="@+id/btn_preset_daily" style="@style/PresetButton" android:text="@string/preset_daily" />
+                <Button android:id="@+id/btn_preset_weekdays" style="@style/PresetButton" android:text="@string/preset_weekdays" />
+                <Button android:id="@+id/btn_preset_weekends" style="@style/PresetButton" android:text="@string/preset_weekends" />
+            </LinearLayout>
+
+            <!-- Set Schedule Button -->
+            <Button
+                android:id="@+id/btn_set_schedule"
+                android:layout_width="200dp"
+                android:layout_height="48dp"
+                android:text="@string/set_schedule"
+                android:textSize="16sp"
+                android:textColor="#FF0D1117"
+                android:background="@drawable/btn_accent"
                 android:focusable="true" />
+
         </LinearLayout>
 
+        <!-- ==================== RIGHT: Schedules + Timer ==================== -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="32dp">
+
+            <!-- Active Schedules -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/active_schedules"
+                android:textSize="20sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="10dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:id="@+id/schedules_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/surface"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Quick Timer -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quick_sleep"
+                android:textSize="16sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <Button android:id="@+id/btn_15" style="@style/TimerButtonSmall" android:text="15" />
+                <Button android:id="@+id/btn_30" style="@style/TimerButtonSmall" android:text="30" />
+                <Button android:id="@+id/btn_45" style="@style/TimerButtonSmall" android:text="45" />
+                <Button android:id="@+id/btn_60" style="@style/TimerButtonSmall" android:text="60" />
+                <Button android:id="@+id/btn_90" style="@style/TimerButtonSmall" android:text="90" />
+                <Button android:id="@+id/btn_120" style="@style/TimerButtonSmall" android:text="120" />
+            </LinearLayout>
+
+            <!-- Timer Countdown -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/timer_countdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="28sp"
+                    android:textColor="@color/accent"
+                    android:fontFamily="monospace"
+                    android:visibility="gone"
+                    android:paddingRight="12dp" />
+
+                <Button
+                    android:id="@+id/btn_cancel_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/cancel"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_primary"
+                    android:background="@drawable/btn_cancel"
+                    android:visibility="gone"
+                    android:focusable="true" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

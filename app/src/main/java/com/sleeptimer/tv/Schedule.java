@@ -1,5 +1,6 @@
 package com.sleeptimer.tv;
 
+import android.content.Context;
 import java.util.Calendar;
 
 /**
@@ -72,14 +73,22 @@ public class Schedule {
         return this.nextFireTime;
     }
 
-    public String getRepeatLabel() {
-        if (repeatDays == REPEAT_NONE) return "Once";
-        if (repeatDays == REPEAT_DAILY) return "Daily";
-        if (repeatDays == REPEAT_WEEKDAYS) return "Weekdays";
-        if (repeatDays == REPEAT_WEEKENDS) return "Weekends";
+    public String getRepeatLabel(Context context) {
+        if (repeatDays == REPEAT_NONE) return context.getString(R.string.repeat_once);
+        if (repeatDays == REPEAT_DAILY) return context.getString(R.string.preset_daily);
+        if (repeatDays == REPEAT_WEEKDAYS) return context.getString(R.string.preset_weekdays);
+        if (repeatDays == REPEAT_WEEKENDS) return context.getString(R.string.preset_weekends);
 
         StringBuilder sb = new StringBuilder();
-        String[] days = {"Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"};
+        String[] days = {
+            context.getString(R.string.day_sun),
+            context.getString(R.string.day_mon),
+            context.getString(R.string.day_tue),
+            context.getString(R.string.day_wed),
+            context.getString(R.string.day_thu),
+            context.getString(R.string.day_fri),
+            context.getString(R.string.day_sat)
+        };
         for (int i = 0; i < 7; i++) {
             if ((repeatDays & (1 << i)) != 0) {
                 if (sb.length() > 0) sb.append(" ");

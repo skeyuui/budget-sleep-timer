@@ -2,8 +2,11 @@
 <resources>
     <color name="background">#FF0D1117</color>
     <color name="surface">#FF1C2128</color>
+    <color name="surface_focused">#FF30363D</color>
     <color name="accent">#FF58A6FF</color>
+    <color name="accent_focused">#FF79C0FF</color>
     <color name="cancel">#FF6E2A2A</color>
+    <color name="cancel_focused">#FF8C3636</color>
     <color name="text_primary">#FFE6EDF3</color>
     <color name="text_secondary">#FF8B949E</color>
 </resources>

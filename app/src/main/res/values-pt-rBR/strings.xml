@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Temporizador de Sono</string>
+
+    <string name="day_sun">Dom</string>
+    <string name="day_mon">Seg</string>
+    <string name="day_tue">Ter</string>
+    <string name="day_wed">Qua</string>
+    <string name="day_thu">Qui</string>
+    <string name="day_fri">Sex</string>
+    <string name="day_sat">Sáb</string>
+
+    <string name="preset_daily">Diário</string>
+    <string name="preset_weekdays">Dias úteis</string>
+    <string name="preset_weekends">Finais de semana</string>
+    
+    <string name="set_schedule">Definir</string>
+    
+    <string name="active_schedules">Agendamentos Ativos</string>
+    <string name="no_schedules">Nenhum agendamento</string>
+    
+    <string name="quick_sleep">Dormir em breve</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="repeat_once">Uma vez</string>
+
+    <string name="adb_disabled_warning">A depuração ADB está desativada. Por favor, ative a Depuração USB nas Opções do Desenvolvedor.</string>
+    <string name="adb_auth_warning">Por favor, marque "Sempre permitir deste computador" na sua TV para autorizar o app.</string>
+    <string name="open_settings">Abrir Config. Dev</string>
+    <string name="retry">Tentar Novamente</string>
+</resources>
