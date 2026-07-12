@@ -196,43 +196,48 @@ public class MainActivity extends Activity {
         adbCheckThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                final int status = AdbClient.testConnection(5555);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (status == AdbClient.STATUS_OK) {
-                            adbBanner.setVisibility(View.GONE);
-                            adbCheckDone = true;
-                        } else {
-                            adbBanner.setVisibility(View.VISIBLE);
-                            if (status == AdbClient.STATUS_AUTH_PENDING) {
-                                adbBannerText.setText(R.string.adb_auth_warning);
-                                adbBannerBtn.setText(R.string.retry);
-                                adbBannerBtn.setVisibility(View.VISIBLE);
-                                adbBannerBtn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        checkAdbStatus();
-                                    }
-                                });
+                try {
+                    final AdbCrypto.AdbKeyPair keys = AdbCrypto.loadOrGenerateKeys(MainActivity.this);
+                    final int status = AdbClient.testConnection(5555, keys);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (status == AdbClient.STATUS_OK) {
+                                adbBanner.setVisibility(View.GONE);
+                                adbCheckDone = true;
                             } else {
-                                adbBannerText.setText(R.string.adb_disabled_warning);
-                                adbBannerBtn.setText(R.string.open_settings);
-                                adbBannerBtn.setVisibility(View.VISIBLE);
-                                adbBannerBtn.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        try {
-                                            startActivity(new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
-                                        } catch (Exception e) {
-                                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                                adbBanner.setVisibility(View.VISIBLE);
+                                if (status == AdbClient.STATUS_AUTH_PENDING) {
+                                    adbBannerText.setText(R.string.adb_auth_warning);
+                                    adbBannerBtn.setText(R.string.retry);
+                                    adbBannerBtn.setVisibility(View.VISIBLE);
+                                    adbBannerBtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            checkAdbStatus();
                                         }
-                                    }
-                                });
+                                    });
+                                } else {
+                                    adbBannerText.setText(R.string.adb_disabled_warning);
+                                    adbBannerBtn.setText(R.string.open_settings);
+                                    adbBannerBtn.setVisibility(View.VISIBLE);
+                                    adbBannerBtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            try {
+                                                startActivity(new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
+                                            } catch (Exception e) {
+                                                startActivity(new Intent(Settings.ACTION_SETTINGS));
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         adbCheckThread.start();
