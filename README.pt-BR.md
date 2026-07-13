@@ -1,17 +1,25 @@
 # Temporizador para Android TV 📺
 [Read in English](README.md)
 
-Um aplicativo minimalista e ultraleve para Android TV que desliga a sua TV em horários programados. Sem bibliotecas pesadas, sem rastreadores, apenas código Android puro.
+Um aplicativo minimalista e ultraleve para Android TV que desliga a sua TV em horários programados. Sem bibliotecas pesadas, sem rastreadores, apenas código Android puro. Consome **0 MB** de memória RAM em segundo plano!
 
 **"Desligar toda sexta à 1:00"** · **"Desligar todo dia às 4:00"** · **"Dormir em 30 minutos"**
 
+## Funcionalidades
+
+- **Zero Memória em Segundo Plano:** Utiliza o `AlarmManager` nativo do Android. Quando fechado, o app não consome memória até o exato minuto em que o timer dispara.
+- **Múltiplas Ações:** Escolha entre **Power (26)**, **Standby (223)**, ou **Hibernate (276)** dependendo do suporte do modelo da sua TV.
+- **Chaves ADB Embutidas:** Gera e gerencia automaticamente suas próprias chaves RSA para execução local do ADB—sem necessidade de apps externos.
+- **Timers Rápidos Acumulativos:** Aperte +5, +15, +30 para empilhar rapidamente um timer regressivo.
+
 ## Como funciona
 
-1. Ao iniciar pela primeira vez, permita que o aplicativo tenha acesso ADB na sua TV.
+1. Ao iniciar pela primeira vez, surgirá um aviso pedindo permissão de depuração ADB. Marque "Sempre permitir deste computador" e pressione OK.
 2. Defina um horário e os dias da semana (ou use os atalhos Diário/Dias úteis/Finais de semana).
-3. Pressione "Definir" — e pronto!
+3. Selecione a ação de desligamento desejada (Power, Standby ou Hibernate).
+4. Pressione "Definir" — e pronto!
 
-Quando o alarme dispara, o aplicativo se conecta ao ADB interno da TV em `localhost:5555` e envia o comando de dormir (`input keyevent 223`). Se o ADB não estiver disponível, ele tenta executar um comando `Runtime.exec()` (para TVs com root).
+Quando o alarme dispara, o aplicativo acorda por um segundo, se conecta ao ADB interno da TV em `localhost:5555`, envia o comando para dormir, e encerra imediatamente.
 
 ## Requisitos
 
