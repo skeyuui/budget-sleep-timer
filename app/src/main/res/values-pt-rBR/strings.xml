@@ -19,10 +19,17 @@
     <string name="active_schedules">Agendamentos Ativos</string>
     <string name="no_schedules">Nenhum agendamento</string>
     
-    <string name="quick_sleep">Dormir em breve</string>
+    <string name="quick_sleep">Dormir Agora</string>
     <string name="cancel">Cancelar</string>
 
-    <string name="repeat_once">Uma vez</string>
+    <string name="action_type">Ação</string>
+    <string-array name="action_options">
+        <item>Suspender</item>
+        <item>Desligar</item>
+        <item>Hibernar</item>
+    </string-array>
+
+    <string name="repeat_once">Apenas uma vez</string>
 
     <string name="adb_disabled_warning">A depuração ADB está desativada. Por favor, ative a Depuração USB nas Opções do Desenvolvedor.</string>
     <string name="adb_auth_warning">Por favor, marque "Sempre permitir deste computador" na sua TV para autorizar o app.</string>

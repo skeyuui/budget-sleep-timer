@@ -46,16 +46,20 @@ public class SleepReceiver extends BroadcastReceiver {
             public void run() {
                 try {
                     AdbCrypto.AdbKeyPair keys = AdbCrypto.loadOrGenerateKeys(ctx);
-                    if (!AdbClient.sendSleepCommand(ADB_PORT, keys)) {
+                    
+                    int action = store.getGlobalAction();
+                    String cmd = "input keyevent 223"; // STANDBY
+                    if (action == ScheduleStore.ACTION_POWER) {
+                        cmd = "input keyevent 26";
+                    } else if (action == ScheduleStore.ACTION_HIBERNATE) {
+                        cmd = "input keyevent 276";
+                    }
+
+                    if (!AdbClient.sendShellCommand(ADB_PORT, cmd, keys)) {
                         // Fallback to direct shell exec
                         try {
-                            Runtime.getRuntime().exec(new String[]{"sh", "-c", "input keyevent 223"});
-                        } catch (Exception e) {
-                            try {
-                                Runtime.getRuntime().exec(new String[]{"sh", "-c", "input keyevent 26"});
-                            } catch (Exception ignored) {
-                            }
-                        }
+                            Runtime.getRuntime().exec(new String[]{"sh", "-c", cmd});
+                        } catch (Exception e) {}
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

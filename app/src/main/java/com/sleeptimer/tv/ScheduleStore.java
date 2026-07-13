@@ -19,6 +19,11 @@ public class ScheduleStore {
     private static final String KEY_LIST = "schedule_list";
     private static final String KEY_NEXT_ID = "next_id";
     private static final String KEY_TIMER_TARGET = "timer_target";
+    private static final String KEY_GLOBAL_ACTION = "global_action";
+
+    public static final int ACTION_STANDBY = 0;
+    public static final int ACTION_POWER = 1;
+    public static final int ACTION_HIBERNATE = 2;
 
     private final SharedPreferences prefs;
 
@@ -120,5 +125,13 @@ public class ScheduleStore {
 
     public void clearTimerTarget() {
         prefs.edit().remove(KEY_TIMER_TARGET).apply();
+    }
+
+    public int getGlobalAction() {
+        return prefs.getInt(KEY_GLOBAL_ACTION, ACTION_STANDBY);
+    }
+
+    public void setGlobalAction(int action) {
+        prefs.edit().putInt(KEY_GLOBAL_ACTION, action).apply();
     }
 }

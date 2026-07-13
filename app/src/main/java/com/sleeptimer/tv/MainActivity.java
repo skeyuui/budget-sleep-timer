@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.content.Intent;
 import android.provider.Settings;
@@ -110,6 +112,17 @@ public class MainActivity extends Activity {
         minutePicker.setValue(defaultTime.get(Calendar.MINUTE));
 
         currentTimeDisplay = findViewById(R.id.current_time_display);
+
+        Spinner actionSpinner = findViewById(R.id.spinner_action);
+        actionSpinner.setSelection(store.getGlobalAction());
+        actionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                store.setGlobalAction(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         setupTvPicker(hourPicker);
         setupTvPicker(minutePicker);
@@ -263,13 +276,16 @@ public class MainActivity extends Activity {
                     return true;
                 }
                 if (!isEditing) {
-                    if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                        return false; // let focus escape left/right naturally
+                    } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
                             View next = v.focusSearch(keyCode == KeyEvent.KEYCODE_DPAD_UP ? View.FOCUS_UP : View.FOCUS_DOWN);
                             if (next != null) next.requestFocus();
                         }
                         return true; // Block NumberPicker from scrolling
                     }
+                    return true; // Block all other keys (including numbers) from changing the picker
                 } else {
                     if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
