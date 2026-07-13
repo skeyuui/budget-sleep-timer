@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -125,8 +126,10 @@ public class MainActivity extends Activity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        setupTvPicker(hourPicker);
-        setupTvPicker(minutePicker);
+        FrameLayout hourContainer = findViewById(R.id.hour_container);
+        FrameLayout minuteContainer = findViewById(R.id.minute_container);
+        setupTvPicker(hourContainer, hourPicker);
+        setupTvPicker(minuteContainer, minutePicker);
 
         // --- Day toggle buttons ---
         dayButtons = new Button[7];
@@ -192,6 +195,13 @@ public class MainActivity extends Activity {
 
         updateDayButtonStyles();
         refreshSchedules();
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        // Fully exit app when Home button is pressed so memory goes to 0
+        finishAndRemoveTask();
     }
 
     @Override
@@ -263,9 +273,8 @@ public class MainActivity extends Activity {
         handler.removeCallbacks(tickRunnable);
     }
 
-    private void setupTvPicker(final NumberPicker picker) {
+    private void setupTvPicker(final FrameLayout container, final NumberPicker picker) {
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        picker.setTag(false); // isEditing = false
 
         // Forcibly disable the inner EditText so it's strictly read-only and never pops up the keyboard.
         for (int i = 0; i < picker.getChildCount(); i++) {
@@ -277,62 +286,56 @@ public class MainActivity extends Activity {
             }
         }
 
-        picker.setOnTouchListener(new View.OnTouchListener() {
+        container.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Boolean editing = (Boolean) v.getTag();
-                if (editing == null || !editing) {
-                    return true; // Consume touch to block mouse scrolling when not editing
-                }
-                return false;
+                return true; // Block touch events so they don't scroll the picker when clicking container
             }
         });
 
-        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker p, int oldVal, int newVal) {
-                Boolean editing = (Boolean) p.getTag();
-                if (editing == null || !editing) {
-                    p.setValue(oldVal); // Revert!
-                }
-            }
-        });
-
-        picker.setOnKeyListener(new View.OnKeyListener() {
+        // The container handles the focus highlight when NOT editing
+        container.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Boolean isEditing = (Boolean) v.getTag();
-                if (isEditing == null) isEditing = false;
-
                 if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                        isEditing = !isEditing;
-                        v.setTag(isEditing);
-                        v.setBackgroundResource(isEditing ? R.drawable.picker_bg_editing : R.drawable.picker_bg);
+                        picker.setFocusable(true);
+                        picker.requestFocus();
+                        container.setBackgroundResource(R.drawable.picker_bg_editing);
                     }
                     return true;
                 }
-                if (!isEditing) {
-                    if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                        return false; // let focus escape left/right naturally
-                    } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            View next = v.focusSearch(keyCode == KeyEvent.KEYCODE_DPAD_UP ? View.FOCUS_UP : View.FOCUS_DOWN);
-                            if (next != null) next.requestFocus();
-                        }
-                        return true; // Block NumberPicker from scrolling
-                    }
-                    return true; // Block all other keys (including numbers) from changing the picker
-                } else {
-                    if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            v.setTag(false);
-                            v.setBackgroundResource(R.drawable.picker_bg);
-                        }
-                        return false; // let focus escape
-                    }
-                }
                 return false;
+            }
+        });
+
+        // The picker handles focus when editing
+        picker.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || 
+                    keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        picker.setFocusable(false);
+                        container.requestFocus();
+                        container.setBackgroundResource(R.drawable.picker_bg);
+                    }
+                    if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+                        return true; // Consume OK click
+                    }
+                    return false; // Let Left/Right actually move focus naturally
+                }
+                return false; // Let NumberPicker handle UP/DOWN naturally
+            }
+        });
+
+        picker.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    picker.setFocusable(false);
+                    container.setBackgroundResource(R.drawable.picker_bg);
+                }
             }
         });
     }

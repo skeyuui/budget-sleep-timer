@@ -65,12 +65,19 @@
                 android:gravity="center_vertical"
                 android:layout_marginBottom="20dp">
 
-                <NumberPicker
-                    android:id="@+id/hour_picker"
-                    android:layout_width="80dp"
-                    android:layout_height="110dp"
-                    android:background="@drawable/picker_bg"
-                    android:focusable="true" />
+                <FrameLayout
+                    android:id="@+id/hour_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:background="@drawable/picker_bg">
+                    
+                    <NumberPicker
+                        android:id="@+id/hour_picker"
+                        android:layout_width="80dp"
+                        android:layout_height="110dp"
+                        android:focusable="false" />
+                </FrameLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,12 +86,19 @@
                     android:textSize="32sp"
                     android:textColor="@color/text_primary" />
 
-                <NumberPicker
-                    android:id="@+id/minute_picker"
-                    android:layout_width="80dp"
-                    android:layout_height="110dp"
-                    android:background="@drawable/picker_bg"
-                    android:focusable="true" />
+                <FrameLayout
+                    android:id="@+id/minute_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:background="@drawable/picker_bg">
+                    
+                    <NumberPicker
+                        android:id="@+id/minute_picker"
+                        android:layout_width="80dp"
+                        android:layout_height="110dp"
+                        android:focusable="false" />
+                </FrameLayout>
             </LinearLayout>
 
             <!-- Day Toggle Buttons -->
