@@ -5,6 +5,8 @@ Um aplicativo minimalista e ultraleve para Android TV que desliga a sua TV em ho
 
 **"Desligar toda sexta à 1:00"** · **"Desligar todo dia às 4:00"** · **"Dormir em 30 minutos"**
 
+<img src="screenshot.png" width="600" alt="App Screenshot"/>
+
 ## Funcionalidades
 
 - **Zero Memória em Segundo Plano:** Usa  `AlarmManager` nativo do Android. Quando fechado, o app não consome memória até o exato minuto em que o timer dispara.
@@ -23,6 +25,12 @@ Um aplicativo minimalista e ultraleve para Android TV que desliga a sua TV em ho
 
 - Dispositivo Android TV (API 21+)
 - **Depuração USB / Depuração de Rede ativada** nas Opções do Desenvolvedor
+
+**Como habilitar a Depuração ADB na sua TV:**
+1. Vá nas **Configurações** da TV > **Preferências do dispositivo** > **Sobre**.
+2. Desça até **Número da versão (Build)** e clique 7 vezes (até aparecer "Você agora é um desenvolvedor!").
+3. Volte um menu e abra as **Opções do desenvolvedor**.
+4. Ative a **Depuração USB** (e **Depuração de rede** se disponível).
 
 ## Compilar e Instalar
 

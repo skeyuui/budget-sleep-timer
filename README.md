@@ -5,6 +5,8 @@ A minimal, ultra-lightweight Android TV app that puts your TV to sleep on a sche
 
 **"Turn off every Friday at 1 AM"** · **"Turn off every day at 4 AM"** · **"Sleep in 30 minutes"**
 
+<img src="screenshot.png" width="600" alt="App Screenshot"/>
+
 ## Features
 
 - **Zero Background Memory:** Uses the native Android `AlarmManager`. When the app is closed, it consumes absolutely zero RAM until the exact minute the timer triggers.
@@ -23,6 +25,12 @@ A minimal, ultra-lightweight Android TV app that puts your TV to sleep on a sche
 
 - Android TV device (API 21+)
 - **USB Debugging / Network Debugging enabled** in Developer Options
+
+**How to enable ADB Debugging on your TV:**
+1. Go to your TV's **Settings** > **Device Preferences** > **About**.
+2. Scroll down to **Build** and click it 7 times (until it says "You are now a developer!").
+3. Go back one menu, and open **Developer options**.
+4. Turn on **USB debugging** (and **Network debugging** if available).
 
 ## Build & Install
 
