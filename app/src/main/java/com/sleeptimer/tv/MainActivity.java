@@ -15,6 +15,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.view.MotionEvent;
 import android.content.Intent;
 import android.provider.Settings;
 import android.view.KeyEvent;
@@ -52,7 +53,7 @@ public class MainActivity extends Activity {
             updateTimerCountdown();
             if (currentTimeDisplay != null) {
                 Calendar now = Calendar.getInstance();
-                currentTimeDisplay.setText(String.format("%02d:%02d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE)));
+                currentTimeDisplay.setText(String.format("%02d:%02d:%02d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND)));
             }
             handler.postDelayed(this, 1000);
         }
@@ -173,11 +174,12 @@ public class MainActivity extends Activity {
         schedulesContainer = findViewById(R.id.schedules_container);
 
         // --- Quick timer ---
+        setupTimerButton(R.id.btn_1, 1);
+        setupTimerButton(R.id.btn_5, 5);
+        setupTimerButton(R.id.btn_10, 10);
         setupTimerButton(R.id.btn_15, 15);
         setupTimerButton(R.id.btn_30, 30);
-        setupTimerButton(R.id.btn_45, 45);
         setupTimerButton(R.id.btn_60, 60);
-        setupTimerButton(R.id.btn_90, 90);
         setupTimerButton(R.id.btn_120, 120);
 
         timerCountdown = findViewById(R.id.timer_countdown);
@@ -264,13 +266,28 @@ public class MainActivity extends Activity {
 
     private void setupTvPicker(final NumberPicker picker) {
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        picker.setTag(false); // isEditing = false
+
+        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker p, int oldVal, int newVal) {
+                Boolean editing = (Boolean) p.getTag();
+                if (editing == null || !editing) {
+                    p.setValue(oldVal); // Revert!
+                }
+            }
+        });
+
         picker.setOnKeyListener(new View.OnKeyListener() {
-            boolean isEditing = false;
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Boolean isEditing = (Boolean) v.getTag();
+                if (isEditing == null) isEditing = false;
+
                 if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         isEditing = !isEditing;
+                        v.setTag(isEditing);
                         v.setBackgroundResource(isEditing ? R.drawable.picker_bg_editing : R.drawable.picker_bg);
                     }
                     return true;
@@ -289,7 +306,7 @@ public class MainActivity extends Activity {
                 } else {
                     if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            isEditing = false;
+                            v.setTag(false);
                             v.setBackgroundResource(R.drawable.picker_bg);
                         }
                         return false; // let focus escape
@@ -408,13 +425,17 @@ public class MainActivity extends Activity {
         findViewById(id).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setQuickTimer(minutes);
+                addQuickTimer(minutes);
             }
         });
     }
 
-    private void setQuickTimer(int minutes) {
-        long target = System.currentTimeMillis() + (minutes * 60 * 1000L);
+    private void addQuickTimer(int minutes) {
+        long target = store.getTimerTarget();
+        if (target == 0 || target <= System.currentTimeMillis()) {
+            target = System.currentTimeMillis();
+        }
+        target += (minutes * 60 * 1000L);
         store.setTimerTarget(target);
         SleepReceiver.armTimer(this, target);
         updateTimerCountdown();

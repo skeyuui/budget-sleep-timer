@@ -68,7 +68,7 @@
                 <NumberPicker
                     android:id="@+id/hour_picker"
                     android:layout_width="80dp"
-                    android:layout_height="140dp"
+                    android:layout_height="110dp"
                     android:background="@drawable/picker_bg"
                     android:focusable="true" />
 
@@ -82,7 +82,7 @@
                 <NumberPicker
                     android:id="@+id/minute_picker"
                     android:layout_width="80dp"
-                    android:layout_height="140dp"
+                    android:layout_height="110dp"
                     android:background="@drawable/picker_bg"
                     android:focusable="true" />
             </LinearLayout>
@@ -119,7 +119,7 @@
             <Button
                 android:id="@+id/btn_set_schedule"
                 android:layout_width="200dp"
-                android:layout_height="48dp"
+                android:layout_height="44dp"
                 android:text="@string/set_schedule"
                 android:textSize="16sp"
                 android:textColor="#FF0D1117"
@@ -214,12 +214,13 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="8dp">
 
-                <Button android:id="@+id/btn_15" style="@style/TimerButtonSmall" android:text="15" />
-                <Button android:id="@+id/btn_30" style="@style/TimerButtonSmall" android:text="30" />
-                <Button android:id="@+id/btn_45" style="@style/TimerButtonSmall" android:text="45" />
-                <Button android:id="@+id/btn_60" style="@style/TimerButtonSmall" android:text="60" />
-                <Button android:id="@+id/btn_90" style="@style/TimerButtonSmall" android:text="90" />
-                <Button android:id="@+id/btn_120" style="@style/TimerButtonSmall" android:text="120" />
+                <Button android:id="@+id/btn_1" style="@style/TimerButtonSmall" android:text="+1" />
+                <Button android:id="@+id/btn_5" style="@style/TimerButtonSmall" android:text="+5" />
+                <Button android:id="@+id/btn_10" style="@style/TimerButtonSmall" android:text="+10" />
+                <Button android:id="@+id/btn_15" style="@style/TimerButtonSmall" android:text="+15" />
+                <Button android:id="@+id/btn_30" style="@style/TimerButtonSmall" android:text="+30" />
+                <Button android:id="@+id/btn_60" style="@style/TimerButtonSmall" android:text="+60" />
+                <Button android:id="@+id/btn_120" style="@style/TimerButtonSmall" android:text="+120" />
             </LinearLayout>
 
             <!-- Timer Countdown -->
