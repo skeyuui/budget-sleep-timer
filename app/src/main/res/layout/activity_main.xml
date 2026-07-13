@@ -155,9 +155,10 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:background="@drawable/picker_bg"
+                    android:background="@drawable/spinner_bg"
                     android:entries="@array/action_options"
-                    android:padding="8dp"/>
+                    android:padding="8dp"
+                    android:paddingEnd="32dp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -221,7 +222,6 @@
                 <Button android:id="@+id/btn_15" style="@style/TimerButtonSmall" android:text="+15" />
                 <Button android:id="@+id/btn_30" style="@style/TimerButtonSmall" android:text="+30" />
                 <Button android:id="@+id/btn_60" style="@style/TimerButtonSmall" android:text="+60" />
-                <Button android:id="@+id/btn_120" style="@style/TimerButtonSmall" android:text="+120" />
             </LinearLayout>
 
             <!-- Timer Countdown -->

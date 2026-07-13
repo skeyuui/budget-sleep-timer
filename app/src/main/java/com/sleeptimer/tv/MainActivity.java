@@ -180,7 +180,6 @@ public class MainActivity extends Activity {
         setupTimerButton(R.id.btn_15, 15);
         setupTimerButton(R.id.btn_30, 30);
         setupTimerButton(R.id.btn_60, 60);
-        setupTimerButton(R.id.btn_120, 120);
 
         timerCountdown = findViewById(R.id.timer_countdown);
         cancelTimerBtn = findViewById(R.id.btn_cancel_timer);
@@ -267,6 +266,27 @@ public class MainActivity extends Activity {
     private void setupTvPicker(final NumberPicker picker) {
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         picker.setTag(false); // isEditing = false
+
+        // Forcibly disable the inner EditText so it's strictly read-only and never pops up the keyboard.
+        for (int i = 0; i < picker.getChildCount(); i++) {
+            View child = picker.getChildAt(i);
+            if (child instanceof android.widget.EditText) {
+                child.setFocusable(false);
+                child.setFocusableInTouchMode(false);
+                child.setClickable(false);
+            }
+        }
+
+        picker.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Boolean editing = (Boolean) v.getTag();
+                if (editing == null || !editing) {
+                    return true; // Consume touch to block mouse scrolling when not editing
+                }
+                return false;
+            }
+        });
 
         picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
