@@ -1,7 +1,7 @@
 # Budget Sleep Timer for Android TV 📺
 [Leia em Português](README.pt-BR.md)
 
-A minimal, ultra-lightweight Android TV app that puts your TV to sleep on a schedule. No bloated libraries, no trackers, just pure Android code. Consumes **0 MB** of RAM in the background!
+A minimal, ultra-lightweight Android TV app that puts your TV to sleep on a schedule. No bloated libraries, no trackers, just pure Android code.
 
 **"Turn off every Friday at 1 AM"** · **"Turn off every day at 4 AM"** · **"Sleep in 30 minutes"**
 
@@ -18,8 +18,6 @@ A minimal, ultra-lightweight Android TV app that puts your TV to sleep on a sche
 2. Set a time and toggle the days of the week (or use Daily/Weekdays/Weekends shortcuts).
 3. Select your preferred sleep action (Power, Standby, or Hibernate).
 4. Hit "Set Schedule" — done!
-
-When the alarm fires, the app wakes up for one second, connects to the TV's internal ADB daemon on `localhost:5555`, sends the sleep command, and dies instantly. 
 
 ## Requirements
 
