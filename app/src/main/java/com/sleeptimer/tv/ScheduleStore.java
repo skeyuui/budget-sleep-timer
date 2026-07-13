@@ -128,7 +128,7 @@ public class ScheduleStore {
     }
 
     public int getGlobalAction() {
-        return prefs.getInt(KEY_GLOBAL_ACTION, ACTION_STANDBY);
+        return prefs.getInt(KEY_GLOBAL_ACTION, ACTION_POWER);
     }
 
     public void setGlobalAction(int action) {
