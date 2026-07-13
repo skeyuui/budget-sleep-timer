@@ -28,8 +28,6 @@ public class AdbClient {
     private static final int A_VERSION = 0x01000000;
     private static final int MAX_PAYLOAD = 4096;
     private static final int TIMEOUT_MS = 3000;
-
-    // Removed hardcoded keys. They are now dynamically generated via AdbCrypto.
     public static final int STATUS_OK = 0;
     public static final int STATUS_AUTH_PENDING = 1;
     public static final int STATUS_ERROR = 2;
